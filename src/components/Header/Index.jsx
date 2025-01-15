@@ -5,9 +5,14 @@ import logo from "../../assets/logoHeader.svg";
 function Header() {
   return (
     <header>
-      <img src={logo} alt="" />
       <Link to="/">
-        <h1>CAC By PlannerPlay</h1>
+        <img src={logo} alt="" />
+      </Link>
+
+      <Link to="/">
+        <h1>
+          <span>CAC</span> By PlannerPlay
+        </h1>
       </Link>
     </header>
   );
