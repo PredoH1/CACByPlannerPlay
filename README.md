@@ -1,8 +1,9 @@
-# React + Vite
+<h1 align="center"> CAC By PLannerPLay </h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center"><img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/></p>
 
-Currently, two official plugins are available:
+## DESCRIÇÃO DO PROJETO
+# O CAC é uma métrica essencial para medir quanto uma empresa está gastando para adquirir novos clientes. Ele ajuda a avaliar a eficiência dos esforços de marketing e vendas, mostrando se o investimento nesses setores está gerando o retorno esperado. Nosso objetivo e melhorar e automatizar esse calculo, oferecendo insights precisos e automáticos para o cliente.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> :construction: Projeto em construção :construction:
+
