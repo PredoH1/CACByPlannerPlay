@@ -1,8 +1,10 @@
 .main {
+  height: 100vh;
   background-color: #181818;
   border-bottom: 0.5px solid #ffde59;
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 6rem 0rem 3rem 0rem;
 }
 
@@ -15,7 +17,6 @@
 }
 
 .paragraph {
-  margin: 0rem 0rem 0.5rem 0rem;
   color: #ffde59;
   font-family: "Ruda", serif;
   letter-spacing: 0.1px;
@@ -66,7 +67,6 @@
   margin-left: 16rem;
   display: inline-block;
   position: relative;
-  padding: 3.5rem;
   border-radius: 15px;
 }
 

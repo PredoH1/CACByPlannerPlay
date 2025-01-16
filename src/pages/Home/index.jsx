@@ -1,13 +1,19 @@
-import { useLayoutEffect } from "react";
 import Header from "../../components/Header/Index";
+import React, { useRef } from "react";
 import styles from "../Home/Home.module.css";
 import { Link } from "react-router-dom";
 import imgMain from "../../assets/bannerMainTop.png";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import InfoPage from "../../components/InfoPage";
 
-function Home() {
+function Home({ onClick }) {
+  const seçãoRef = useRef(null);
+
+  function rolarParaSeção() {
+    if (seçãoRef.current) {
+      seçãoRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   return (
     <>
       <Header />
@@ -19,7 +25,9 @@ function Home() {
             <p className={styles.paragraph}>SUAS VENDAS</p>
           </div>
           <div className={styles.btnMoreInfo}>
-            <button type="button">Saiba mais</button>
+            <button onClick={rolarParaSeção} type="button">
+              Saiba mais
+            </button>
           </div>
         </section>
         <section className={styles.containerRight}>
@@ -28,7 +36,7 @@ function Home() {
           </div>
         </section>
       </main>
-      <InfoPage />
+      <InfoPage ref={seçãoRef} />
       <Link to="/sobre">Sobre</Link>
     </>
   );
