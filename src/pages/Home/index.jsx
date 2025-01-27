@@ -4,6 +4,7 @@ import styles from "../Home/Home.module.css";
 import { Link } from "react-router-dom";
 import imgMain from "../../assets/bannerMainTop.png";
 import InfoPage from "../../components/InfoPage";
+import Sistem from "../../components/Sistem";
 
 function Home({ onClick }) {
   const seçãoRef = useRef(null);
@@ -37,6 +38,7 @@ function Home({ onClick }) {
         </section>
       </main>
       <InfoPage ref={seçãoRef} />
+      <Sistem />
       <Link to="/sobre">Sobre</Link>
     </>
   );
