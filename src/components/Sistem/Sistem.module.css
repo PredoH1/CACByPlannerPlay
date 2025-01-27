@@ -156,3 +156,9 @@
   font-size: 1rem;
   margin: 0.5rem;
 }
+
+.chartDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

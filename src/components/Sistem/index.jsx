@@ -1,34 +1,58 @@
 import styles from "../Sistem/Sistem.module.css";
 import warningIcon from "../../assets/warning.svg";
 import React, { useState } from "react";
+import ReactApexChart from "react-apexcharts";
 
 function Sistem() {
   const [marketingData, setMarketingData] = useState({});
   const [salesData, setSalesData] = useState({});
   const [clientsAcquired, setClientsAcquired] = useState(0);
   const [cacResult, setCacResult] = useState(null);
+  const [showChart, setShowChart] = useState(false);
 
-  const handleInputChange = (event, type, key) => {
+  function handleInputChange(event, type, key) {
     const value = parseFloat(event.target.value) || 0;
     if (type === "marketing") {
       setMarketingData((prev) => ({ ...prev, [key]: value }));
     } else if (type === "sales") {
       setSalesData((prev) => ({ ...prev, [key]: value }));
     }
-  };
+  }
 
-  const calculateTotals = (data) => {
+  function calculateTotals(data) {
     return Object.values(data).reduce((sum, value) => sum + value, 0);
-  };
+  }
 
-  const calculateCAC = () => {
+  function calculateCAC() {
     const marketingTotal = calculateTotals(marketingData);
     const salesTotal = calculateTotals(salesData);
     const totalInvestment = marketingTotal + salesTotal;
     const cac = totalInvestment / (clientsAcquired || 1);
 
     setCacResult(cac);
-  };
+  }
+
+  function generateChartData() {
+    const marketingEntries = Object.entries(marketingData).filter(
+      ([_, value]) => value > 0
+    );
+    const salesEntries = Object.entries(salesData).filter(
+      ([_, value]) => value > 0
+    );
+
+    const labels = [
+      ...marketingEntries.map(([key]) => key),
+      ...salesEntries.map(([key]) => key),
+    ];
+    const series = [
+      ...marketingEntries.map(([_, value]) => value),
+      ...salesEntries.map(([_, value]) => value),
+    ];
+
+    return { labels, series };
+  }
+
+  const chartData = generateChartData();
 
   const marketingOptions = [
     "Campanhas Publicitárias",
@@ -45,6 +69,32 @@ function Sistem() {
     "Treinamentos",
     "Outros",
   ];
+
+  function downloadChartAsImage() {
+    const chartElement = document.querySelector("#chart");
+    if (chartElement) {
+      const svg = chartElement.querySelector("svg");
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        const pngFile = canvas.toDataURL("image/png");
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = pngFile;
+        downloadLink.download = "chart.png";
+        downloadLink.click();
+      };
+
+      img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+    }
+  }
+
   return (
     <section className={styles.container}>
       <h1 className={styles.title}>
@@ -126,7 +176,6 @@ function Sistem() {
           </div>
         </div>
       </section>
-
       {cacResult !== null && (
         <div className={styles.results}>
           <p>
@@ -149,7 +198,41 @@ function Sistem() {
               custo-benefício.
             </p>
           </div>
-          <button>Gerar Gráfico</button>
+          <button onClick={() => setShowChart(true)}>Gerar Gráfico</button>
+        </div>
+      )}
+      {showChart && (
+        <div>
+          <div className={styles.chartDiv} id="chart">
+            <ReactApexChart
+              options={{
+                chart: {
+                  width: 300,
+                  type: "pie",
+                },
+                labels: chartData.labels,
+                responsive: [
+                  {
+                    breakpoint: 480,
+                    options: {
+                      chart: {
+                        width: 300,
+                      },
+                      legend: {
+                        position: "bottom",
+                      },
+                    },
+                  },
+                ],
+              }}
+              series={chartData.series}
+              type="pie"
+              width={600}
+            />
+          </div>
+          <button onClick={downloadChartAsImage}>
+            Baixar Gráfico como Imagem
+          </button>
         </div>
       )}
     </section>
