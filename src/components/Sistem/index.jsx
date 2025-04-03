@@ -1,7 +1,9 @@
 import styles from "../Sistem/Sistem.module.css";
 import warningIcon from "../../assets/warning.svg";
-import React, { useState } from "react";
+import binIcon from "../../assets/binIcon.svg";
+import React, { useState, useEffect, useRef } from "react";
 import ReactApexChart from "react-apexcharts";
+import api from "../../services/api";
 
 function Sistem() {
   const [marketingData, setMarketingData] = useState({});
@@ -95,6 +97,46 @@ function Sistem() {
     }
   }
 
+  //--------------------------------- historico dados ----------------------------
+
+  const [backupData, setbackupData] = useState([]);
+
+  const inputData = useRef();
+  const inputTotMarketing = useRef();
+  const inputTotVendas = useRef();
+  const inputclientes = useRef();
+  const inputResultCAC = useRef();
+
+  async function getData() {
+    const backupApi = await api.get("/datas");
+
+    setbackupData(backupApi.data);
+  }
+
+  async function createData() {
+    await api.post(
+      "/datas",
+      {
+        dataRegistro: inputData.current.value,
+        totalMarketing: inputTotMarketing.current.value,
+        totalVendas: inputTotVendas.current.value,
+        cliente: inputclientes.current.value,
+        ResultadoCac: inputResultCAC.current.value,
+      },
+      getData()
+    );
+  }
+
+  async function deleteData(id) {
+    await api.delete(`/datas/${id}`);
+
+    getData();
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <section className={styles.container}>
       <h1 className={styles.title}>
@@ -162,6 +204,11 @@ function Sistem() {
             </p>
 
             <label>
+              Data do Registro:
+              <input type="date" id="dataInput"></input>
+            </label>
+
+            <label>
               Total de Clientes Adquiridos:
               <input
                 type="number"
@@ -199,6 +246,58 @@ function Sistem() {
             </p>
           </div>
           <button onClick={() => setShowChart(true)}>Gerar Gráfico</button>
+
+          <label>
+            Total Investido em Marketing:
+            <input
+              type="text"
+              value={`R$ ${calculateTotals(marketingData).toFixed(2)}`}
+              readOnly
+              ref={inputTotMarketing}
+            />
+          </label>
+
+          <label>
+            Total Investido em Vendas:
+            <input
+              type="text"
+              value={`R$ ${calculateTotals(salesData).toFixed(2)}`}
+              readOnly
+              ref={inputTotVendas}
+            />
+          </label>
+
+          <label>
+            Data do Registro:
+            <input
+              type="date"
+              value={inputData.current?.value || ""}
+              onChange={(e) => (inputData.current.value = e.target.value)}
+              ref={inputData}
+            />
+          </label>
+
+          <label>
+            Total de Clientes Adquiridos:
+            <input
+              type="number"
+              value={clientsAcquired}
+              readOnly
+              ref={inputclientes}
+            />
+          </label>
+
+          <label>
+            Resultado do CAC:
+            <input
+              type="text"
+              value={`R$ ${cacResult.toFixed(2)}`}
+              readOnly
+              ref={inputResultCAC}
+            />
+          </label>
+
+          <button onClick={createData}>Salvar</button>
         </div>
       )}
       {showChart && (
@@ -230,11 +329,38 @@ function Sistem() {
               width={600}
             />
           </div>
-          <button onClick={downloadChartAsImage}>
-            Baixar Gráfico como Imagem
-          </button>
         </div>
       )}
+
+      <section className={styles.dataHistory}>
+        <h1 className={styles.title}>Seu historico</h1>
+        <div className={styles.boxData}>
+          {backupData.map((user) => (
+            <div key={user.id}>
+              <div>
+                <p>
+                  Data do registro:<span>{user.dataRegistro}</span>
+                </p>
+                <p>
+                  Total Marketing:<span>{user.totalMarketing}</span>
+                </p>
+                <p>
+                  Total Vendas:<span>{user.totalVendas}</span>
+                </p>
+                <p>
+                  clientes:<span>{user.cliente}</span>
+                </p>
+                <p>
+                  Resultado CAC:<span>{user.ResultadoCac}</span>
+                </p>
+              </div>
+              <button onClick={() => deleteData(user.id)}>
+                <img src={binIcon} alt="lixeira" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
     </section>
   );
 }
