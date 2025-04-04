@@ -17,6 +17,8 @@
   color: #fff;
 }
 
+/* ------------------sistema-----------------------*/
+
 .sistem {
   width: 100%;
   padding: 6rem 0rem 3rem 0rem;
@@ -103,6 +105,9 @@
   margin: 0.8rem;
 }
 
+/*-------------------------Fim sistema--------------------------*/
+/* ---------------------------- Resultado-----------------------*/
+
 .results {
   width: 100%;
   height: 100%;
@@ -157,11 +162,38 @@
   margin: 0.5rem;
 }
 
+/*-----------------------------Fim resultado -----------------------------*/
+/* ---------------------------- Salvamento-----------------------------------*/
+
+.boxSave {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0rem 1rem 0rem;
+}
+
+.boxSave label {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.boxSave input {
+  width: 100%;
+  height: 4vh;
+  color: #fff;
+  background-color: #202020;
+  border: 0.5px solid #ffde59;
+}
+
+/* --------------------------fim salvamento-------------------*/
+
 .chartDiv {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+/* -------------------------Backup -------------------------------*/
 
 .dataHistory {
   display: flex;
@@ -200,4 +232,10 @@
 
 .dataHistory button img {
   width: 3rem;
+}
+
+.boxData span {
+  font-size: 1.3rem;
+  margin-left: 0.7rem;
+  color: #ffde59;
 }

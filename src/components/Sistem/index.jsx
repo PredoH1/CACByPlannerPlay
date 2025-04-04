@@ -6,6 +6,7 @@ import ReactApexChart from "react-apexcharts";
 import api from "../../services/api";
 
 function Sistem() {
+  //----------------------------------- sistema de Calculo ------------------------------
   const [marketingData, setMarketingData] = useState({});
   const [salesData, setSalesData] = useState({});
   const [clientsAcquired, setClientsAcquired] = useState(0);
@@ -33,6 +34,8 @@ function Sistem() {
 
     setCacResult(cac);
   }
+
+  // ------------------------------ Gerador de graficos ----------------------------------------
 
   function generateChartData() {
     const marketingEntries = Object.entries(marketingData).filter(
@@ -71,6 +74,8 @@ function Sistem() {
     "Treinamentos",
     "Outros",
   ];
+
+  // --------------------- Ferramenta para downloado de grafico --------------------------
 
   function downloadChartAsImage() {
     const chartElement = document.querySelector("#chart");
@@ -138,6 +143,7 @@ function Sistem() {
   }, []);
 
   return (
+    // ---------------------------------- Corpo ---------------------------
     <section className={styles.container}>
       <h1 className={styles.title}>
         Descubra como é simples e prático otimizar sua gestão de custos!
@@ -223,6 +229,7 @@ function Sistem() {
           </div>
         </div>
       </section>
+
       {cacResult !== null && (
         <div className={styles.results}>
           <p>
@@ -247,57 +254,59 @@ function Sistem() {
           </div>
           <button onClick={() => setShowChart(true)}>Gerar Gráfico</button>
 
-          <label>
-            Total Investido em Marketing:
-            <input
-              type="text"
-              value={`R$ ${calculateTotals(marketingData).toFixed(2)}`}
-              readOnly
-              ref={inputTotMarketing}
-            />
-          </label>
+          <div className={styles.boxSave}>
+            <label>
+              Total Investido em Marketing:
+              <input
+                type="text"
+                value={`R$ ${calculateTotals(marketingData).toFixed(2)}`}
+                readOnly
+                ref={inputTotMarketing}
+              />
+            </label>
 
-          <label>
-            Total Investido em Vendas:
-            <input
-              type="text"
-              value={`R$ ${calculateTotals(salesData).toFixed(2)}`}
-              readOnly
-              ref={inputTotVendas}
-            />
-          </label>
+            <label>
+              Total Investido em Vendas:
+              <input
+                type="text"
+                value={`R$ ${calculateTotals(salesData).toFixed(2)}`}
+                readOnly
+                ref={inputTotVendas}
+              />
+            </label>
 
-          <label>
-            Data do Registro:
-            <input
-              type="date"
-              value={inputData.current?.value || ""}
-              onChange={(e) => (inputData.current.value = e.target.value)}
-              ref={inputData}
-            />
-          </label>
+            <label>
+              Data do Registro:
+              <input
+                type="date"
+                value={inputData.current?.value || ""}
+                onChange={(e) => (inputData.current.value = e.target.value)}
+                ref={inputData}
+              />
+            </label>
 
-          <label>
-            Total de Clientes Adquiridos:
-            <input
-              type="number"
-              value={clientsAcquired}
-              readOnly
-              ref={inputclientes}
-            />
-          </label>
+            <label>
+              Total de Clientes Adquiridos:
+              <input
+                type="number"
+                value={clientsAcquired}
+                readOnly
+                ref={inputclientes}
+              />
+            </label>
 
-          <label>
-            Resultado do CAC:
-            <input
-              type="text"
-              value={`R$ ${cacResult.toFixed(2)}`}
-              readOnly
-              ref={inputResultCAC}
-            />
-          </label>
+            <label>
+              Resultado do CAC:
+              <input
+                type="text"
+                value={`R$ ${cacResult.toFixed(2)}`}
+                readOnly
+                ref={inputResultCAC}
+              />
+            </label>
 
-          <button onClick={createData}>Salvar</button>
+            <button onClick={createData}>Salvar</button>
+          </div>
         </div>
       )}
       {showChart && (
