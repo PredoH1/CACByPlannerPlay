@@ -195,47 +195,19 @@
 
 /* -------------------------Backup -------------------------------*/
 
-.dataHistory {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  color: #fff;
-
+.tableBackup {
+  width: 100%;
+  background-color: #fff;
   padding: 20px;
+  box-shadow: 0px 0px 5px #ccc;
+  border-radius: 5px;
+  max-width: 1120px;
+  margin: 20px auto;
+  word-break: break-all;
 }
 
-.boxData {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.boxData > div {
-  display: flex;
-  align-items: center;
-  background-color: #1a1a1a;
-  border-radius: 8px;
-}
-
-.boxData > div p {
-  margin: 0.4rem 0rem 0.4rem 0rem;
-  font-size: 1.2rem;
-}
-
-.dataHistory button {
-  background-color: transparent;
-  cursor: pointer;
-  border: none;
-}
-
-.dataHistory button img {
-  width: 3rem;
-}
-
-.boxData span {
-  font-size: 1.3rem;
-  margin-left: 0.7rem;
-  color: #ffde59;
+.trBackup {
+  text-align: start;
+  border-bottom: inset;
+  padding-bottom: 5px;
 }

@@ -1,0 +1,34 @@
+.mainSobre {
+  background-color: #1a1a1a;
+  height: 100vh;
+}
+
+.titleAndBack {
+  padding: 2rem 0rem 2rem 0rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.swiperSlide {
+  text-align: center;
+  font-size: 18px;
+  background: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiperSlide img {
+  display: block;
+  width: 200px;
+  height: 100%;
+  object-fit: cover;
+  padding: 2rem;
+}
+
+.swiper {
+  width: 95%;
+  height: 100%;
+  background: #1a1a1a;
+}

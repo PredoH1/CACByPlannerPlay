@@ -1,17 +1,19 @@
 import styles from "../Sistem/Sistem.module.css";
 import warningIcon from "../../assets/warning.svg";
-import binIcon from "../../assets/binIcon.svg";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
-import api from "../../services/api";
+import axios from "axios";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 function Sistem() {
-  //----------------------------------- sistema de Calculo ------------------------------
+  //AREA DO CALCULO
   const [marketingData, setMarketingData] = useState({});
   const [salesData, setSalesData] = useState({});
   const [clientsAcquired, setClientsAcquired] = useState(0);
   const [cacResult, setCacResult] = useState(null);
   const [showChart, setShowChart] = useState(false);
+  const [dataRegistro, setDataRegistro] = useState("");
+  const [backup, setBackup] = useState([]);
 
   function handleInputChange(event, type, key) {
     const value = parseFloat(event.target.value) || 0;
@@ -27,15 +29,18 @@ function Sistem() {
   }
 
   function calculateCAC() {
+    if (clientsAcquired <= 0) {
+      alert("Por favor, insira um número de clientes adquiridos maior que 0.");
+      return;
+    }
+
     const marketingTotal = calculateTotals(marketingData);
     const salesTotal = calculateTotals(salesData);
     const totalInvestment = marketingTotal + salesTotal;
-    const cac = totalInvestment / (clientsAcquired || 1);
+    const cac = totalInvestment / clientsAcquired;
 
     setCacResult(cac);
   }
-
-  // ------------------------------ Gerador de graficos ----------------------------------------
 
   function generateChartData() {
     const marketingEntries = Object.entries(marketingData).filter(
@@ -75,7 +80,7 @@ function Sistem() {
     "Outros",
   ];
 
-  // --------------------- Ferramenta para downloado de grafico --------------------------
+  // AREA DE DOWNLOAD - DESATIVADA
 
   function downloadChartAsImage() {
     const chartElement = document.querySelector("#chart");
@@ -102,48 +107,55 @@ function Sistem() {
     }
   }
 
-  //--------------------------------- historico dados ----------------------------
+  // AREA DO BANCO DE DADOS
 
-  const [backupData, setbackupData] = useState([]);
+  async function salvarDados() {
+    if (cacResult === null) {
+      alert("Calcule o CAC antes de salvar.");
+      return;
+    }
 
-  const inputData = useRef();
-  const inputTotMarketing = useRef();
-  const inputTotVendas = useRef();
-  const inputclientes = useRef();
-  const inputResultCAC = useRef();
+    const dados = {
+      data_registro: dataRegistro,
+      total_marketing: calculateTotals(marketingData).toFixed(2),
+      total_vendas: calculateTotals(salesData).toFixed(2),
+      n_clientes: clientsAcquired,
+      resultado_cac: cacResult.toFixed(2),
+    };
 
-  async function getData() {
-    const backupApi = await api.get("/datas");
-
-    setbackupData(backupApi.data);
+    try {
+      await axios.post("http://localhost:8800", dados);
+      alert("Dados salvos com sucesso!");
+      fetchBackup(); // <- ATUALIZA A LISTA APÓS SALVAR
+    } catch (error) {
+      console.error("Erro ao salvar dados:", error);
+      alert("Erro ao salvar os dados.");
+    }
   }
 
-  async function createData() {
-    await api.post(
-      "/datas",
-      {
-        dataRegistro: inputData.current.value,
-        totalMarketing: inputTotMarketing.current.value,
-        totalVendas: inputTotVendas.current.value,
-        cliente: inputclientes.current.value,
-        ResultadoCac: inputResultCAC.current.value,
-      },
-      getData()
-    );
-  }
-
-  async function deleteData(id) {
-    await api.delete(`/datas/${id}`);
-
-    getData();
+  async function fetchBackup() {
+    try {
+      const response = await axios.get("http://localhost:8800");
+      setBackup(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar backup:", error);
+    }
   }
 
   useEffect(() => {
-    getData();
+    fetchBackup();
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8800/${id}`);
+      fetchBackup(); // Atualiza lista após deletar
+    } catch (error) {
+      console.error("Erro ao deletar:", error);
+    }
+  };
+
   return (
-    // ---------------------------------- Corpo ---------------------------
     <section className={styles.container}>
       <h1 className={styles.title}>
         Descubra como é simples e prático otimizar sua gestão de custos!
@@ -211,7 +223,11 @@ function Sistem() {
 
             <label>
               Data do Registro:
-              <input type="date" id="dataInput"></input>
+              <input
+                type="date"
+                value={dataRegistro}
+                onChange={(e) => setDataRegistro(e.target.value)}
+              />
             </label>
 
             <label>
@@ -245,7 +261,6 @@ function Sistem() {
               Um CAC baixo significa que você está adquirindo clientes de forma
               eficiente, com custos reduzidos.
             </p>
-
             <p>
               Já um CAC alto pode indicar que é necessário otimizar seus
               investimentos em marketing e vendas para melhorar a relação
@@ -261,7 +276,6 @@ function Sistem() {
                 type="text"
                 value={`R$ ${calculateTotals(marketingData).toFixed(2)}`}
                 readOnly
-                ref={inputTotMarketing}
               />
             </label>
 
@@ -271,7 +285,6 @@ function Sistem() {
                 type="text"
                 value={`R$ ${calculateTotals(salesData).toFixed(2)}`}
                 readOnly
-                ref={inputTotVendas}
               />
             </label>
 
@@ -279,20 +292,14 @@ function Sistem() {
               Data do Registro:
               <input
                 type="date"
-                value={inputData.current?.value || ""}
-                onChange={(e) => (inputData.current.value = e.target.value)}
-                ref={inputData}
+                value={dataRegistro}
+                onChange={(e) => setDataRegistro(e.target.value)}
               />
             </label>
 
             <label>
               Total de Clientes Adquiridos:
-              <input
-                type="number"
-                value={clientsAcquired}
-                readOnly
-                ref={inputclientes}
-              />
+              <input type="number" value={clientsAcquired} readOnly />
             </label>
 
             <label>
@@ -301,14 +308,16 @@ function Sistem() {
                 type="text"
                 value={`R$ ${cacResult.toFixed(2)}`}
                 readOnly
-                ref={inputResultCAC}
               />
             </label>
 
-            <button onClick={createData}>Salvar</button>
+            <button type="submit" onClick={salvarDados}>
+              Salvar
+            </button>
           </div>
         </div>
       )}
+
       {showChart && (
         <div>
           <div className={styles.chartDiv} id="chart">
@@ -343,32 +352,31 @@ function Sistem() {
 
       <section className={styles.dataHistory}>
         <h1 className={styles.title}>Seu historico</h1>
-        <div className={styles.boxData}>
-          {backupData.map((user) => (
-            <div key={user.id}>
-              <div>
-                <p>
-                  Data do registro:<span>{user.dataRegistro}</span>
-                </p>
-                <p>
-                  Total Marketing:<span>{user.totalMarketing}</span>
-                </p>
-                <p>
-                  Total Vendas:<span>{user.totalVendas}</span>
-                </p>
-                <p>
-                  clientes:<span>{user.cliente}</span>
-                </p>
-                <p>
-                  Resultado CAC:<span>{user.ResultadoCac}</span>
-                </p>
-              </div>
-              <button onClick={() => deleteData(user.id)}>
-                <img src={binIcon} alt="lixeira" />
-              </button>
-            </div>
-          ))}
-        </div>
+        <table className={styles.tableBackup}>
+          <thead>
+            <tr>
+              <th className={styles.trBackup}>data_registro</th>
+              <th className={styles.trBackup}>total_marketing</th>
+              <th className={styles.trBackup}>total_vendas</th>
+              <th className={styles.trBackup}>n_clientes</th>
+              <th className={styles.trBackup}>resultado_cac</th>
+            </tr>
+          </thead>
+          <tbody>
+            {backup.map((item, i) => (
+              <tr key={i}>
+                <td>{item.data_registro}</td>
+                <td>R$ {parseFloat(item.total_marketing).toFixed(2)}</td>
+                <td>R$ {parseFloat(item.total_vendas).toFixed(2)}</td>
+                <td>{item.n_clientes}</td>
+                <td>R$ {parseFloat(item.resultado_cac).toFixed(2)}</td>
+                <td style={{ textAlign: "center" }}>
+                  <FaTrash onClick={() => handleDelete(item.id)} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </section>
   );
