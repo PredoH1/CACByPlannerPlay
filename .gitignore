@@ -1,0 +1,40 @@
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env files (caso coloque algo temporário na raiz)
+.env
+.env.*
+
+# IDEs / editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Node modules (por segurança, caso algum acabe vindo pra raiz)
+node_modules/
+
+# Backup / system files
+*.swp
+*.bak
+*.tmp
+
+# Metadata (caso volte a aparecer)
+metadata.json
+
+# MacOS specific
+.AppleDouble
+.LSOverride
+
+# Windows specific
+ehthumbs.db
+Desktop.ini
