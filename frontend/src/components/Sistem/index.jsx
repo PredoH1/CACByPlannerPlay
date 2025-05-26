@@ -2,11 +2,12 @@ import styles from "../Sistem/Sistem.module.css";
 import warningIcon from "../../assets/warning.svg";
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
-const apiUrl = import.meta.env.VITE_API_URL;
+
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 
 function Sistem() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   //AREA DO CALCULO
   const [marketingData, setMarketingData] = useState({});
   const [salesData, setSalesData] = useState({});
