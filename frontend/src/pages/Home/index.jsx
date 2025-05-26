@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import InfoPage from "../../components/InfoPage";
 import Sistem from "../../components/Sistem";
 import Footer from "../../components/Footer";
-import gif from "../../assets/gifHEader.gif";
+import gifHeader from "../../assets/gifHeader.gif";
 
 function Home({ onClick }) {
   const seçãoRef = useRef(null);
@@ -33,7 +33,7 @@ function Home({ onClick }) {
           </div>
         </section>
         <section className={styles.containerRight}>
-          <img src={gif} alt="" />
+          <img src={gifHeader} alt="" />
         </section>
       </main>
       <InfoPage ref={seçãoRef} />
