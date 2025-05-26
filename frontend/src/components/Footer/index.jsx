@@ -6,7 +6,7 @@ function Footer() {
     <footer>
       <section className={style.footerLogo}>
         <img src={logo} alt="" />
-        <h1 className={style.logoText}>PLannerPlay</h1>
+        <h1 className={style.logoText}>PLannerPlayy</h1>
       </section>
       <section className={style.footerLinks}>
         <p>© 2025 PlannerPLay. Todos os direitos reservados.</p>
