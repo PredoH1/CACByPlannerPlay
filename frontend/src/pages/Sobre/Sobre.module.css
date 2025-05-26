@@ -1,10 +1,10 @@
 .mainSobre {
-  background-color: #1a1a1a;
+  background-color: #f4f6f7;
   font-family: "Bree Serif", serif;
 }
 
 .titleAndBack {
-  background-color: #0c2701;
+  background-color: #ddecf7;
   padding: 2rem 0rem 2rem 0rem;
   display: flex;
   justify-content: stretch;
@@ -58,23 +58,24 @@
 
 .descText h1 {
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .descText p {
-  color: #fff;
+  color: #1a1a1a;
 }
 
 .boxCarrosel h1 {
   text-align: center;
   padding-top: 2rem;
   margin: 2rem 0rem 2rem 0rem;
-  border-top: 1px solid #2e9d00;
+  border-top: 1px solid #1a1a1a;
 }
 
 .swiperSlide {
   text-align: center;
   font-size: 18px;
-  background: #1a1a1a;
+  background: #f4f6f7;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -91,5 +92,19 @@
 .swiper {
   width: 95%;
   height: 100%;
-  background: #1a1a1a;
+  background: #f4f6f7;
+}
+
+@media (max-width: 768px) {
+  .sectionDesc {
+    flex-direction: column;
+  }
+
+  .desc {
+    flex-direction: column;
+  }
+
+  .desc img {
+    width: 400px;
+  }
 }

@@ -1,6 +1,6 @@
 .container {
   font-family: "Ruda", serif;
-  background-color: #181818;
+  background-color: #d6eaf8;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -9,7 +9,7 @@
 }
 
 .boxTitleSistem {
-  background-color: #aed6f1;
+  background-color: #cde6f8;
   width: 100%;
   height: 10rem;
   display: flex;
@@ -52,7 +52,7 @@
 .card2 {
   width: 100%;
   height: 100%;
-  background-color: #1a1a1a;
+  background-color: #f4f6f7;
   border-radius: 0.1rem;
   transition: all 0.2s;
   display: flex;
@@ -72,21 +72,26 @@
 
 .card2 h2 {
   font-size: 1.5rem;
-  color: #ffde59;
+  color: #2c3e50;
+  font-weight: 900;
 }
 
 .card2 label {
-  color: #fff;
+  font-size: 19px;
+  font-weight: 900;
+  color: #1a1a1a;
   display: flex;
   flex-direction: column;
 }
 
 .card2 input {
+  font-size: 13px;
+  font-weight: 900;
   width: 100%;
   height: 4vh;
-  color: #fff;
-  background-color: #202020;
-  border: 0.5px solid #ffde59;
+  color: #2c3e50;
+  background-color: #f4f6f7;
+  border: 0.5px solid #2c3e50;
 }
 
 .card2 button {
@@ -114,7 +119,7 @@
 }
 
 .card2 p {
-  color: #fff;
+  color: #1a1a1a;
   font-weight: bold;
   margin: 0.8rem;
 }
@@ -133,14 +138,15 @@
 }
 
 .results p {
-  color: #fff;
+  color: #2c3e50;
   font-size: 2rem;
+  font-weight: 800;
 }
 
 .results button {
   background-image: linear-gradient(45deg, #2e9d00, #ffde59);
   border: none;
-  color: #fff;
+  color: #1a1a1a;
   font-family: "Ruda", serif;
   padding: 10px 20px;
   margin-top: 0.5rem;
@@ -186,7 +192,7 @@
 }
 
 .boxSave label {
-  color: #fff;
+  color: #333333;
   display: flex;
   flex-direction: column;
 }
@@ -194,9 +200,11 @@
 .boxSave input {
   width: 100%;
   height: 4vh;
-  color: #fff;
-  background-color: #202020;
-  border: 0.5px solid #ffde59;
+  color: #2c3e50;
+  font-weight: 900;
+  font-size: 13px;
+  background-color: #f4f6f7;
+  border: 1px solid #2c3e50;
 }
 
 /* --------------------------fim salvamento-------------------*/
@@ -230,4 +238,58 @@
   text-align: center;
   border-bottom: #2e9d00 solid 3px;
   padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .subtitle {
+    display: none;
+  }
+  .sistem {
+    flex-direction: column;
+  }
+
+  .card {
+    width: 90%;
+    margin-bottom: 1.2rem;
+  }
+
+  .results {
+    width: 100%;
+  }
+
+  .results p {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  .obsResults {
+    width: 100%;
+    text-align: center;
+  }
+
+  .obsResults p {
+    text-align: justify;
+  }
+  .obsResults span p {
+    text-align: center;
+  }
+
+  .dataHistory {
+    width: 100%;
+  }
+
+  .dataHistory tr {
+    font-size: 0.9rem;
+  }
+
+  .dataHistory td {
+    font-size: 0.7rem;
+  }
 }
