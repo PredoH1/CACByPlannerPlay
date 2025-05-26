@@ -2,6 +2,7 @@ import styles from "../Sistem/Sistem.module.css";
 import warningIcon from "../../assets/warning.svg";
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
+const apiUrl = import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 
@@ -124,9 +125,9 @@ function Sistem() {
     };
 
     try {
-      await axios.post("http://localhost:8800", dados);
+      await axios.post(`${apiUrl}`, dados);
       alert("Dados salvos com sucesso!");
-      fetchBackup(); // <- ATUALIZA A LISTA APÓS SALVAR
+      fetchBackup();
     } catch (error) {
       console.error("Erro ao salvar dados:", error);
       alert("Erro ao salvar os dados.");
@@ -135,7 +136,7 @@ function Sistem() {
 
   async function fetchBackup() {
     try {
-      const response = await axios.get("http://localhost:8800");
+      const response = await axios.get(`${apiUrl}`);
       setBackup(response.data);
     } catch (error) {
       console.error("Erro ao buscar backup:", error);
@@ -148,8 +149,8 @@ function Sistem() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8800/${id}`);
-      fetchBackup(); // Atualiza lista após deletar
+      await axios.delete(`${apiUrl}/${id}`);
+      fetchBackup();
     } catch (error) {
       console.error("Erro ao deletar:", error);
     }
