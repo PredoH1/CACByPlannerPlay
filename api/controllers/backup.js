@@ -4,8 +4,12 @@ export const getBackup = (_, res) => {
   const q = "SELECT * FROM backup";
 
   db.query(q, (err, data) => {
-    if (err) return res.json(err);
+    if (err) {
+      console.log("Erro ao buscar dados no banco:", err);
+      return res.json(err);
+    }
 
+    console.log("Dados retornados do banco:", data); // <-- Aqui para debug
     return res.status(200).json(data);
   });
 };
