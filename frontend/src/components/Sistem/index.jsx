@@ -126,7 +126,7 @@ function Sistem() {
     };
 
     try {
-      await axios.post(`${apiUrl}`, dados);
+      await axios.post(`${apiUrl}/backup`, dados); // <- corrigido aqui
       alert("Dados salvos com sucesso!");
       fetchBackup();
     } catch (error) {
@@ -151,7 +151,7 @@ function Sistem() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${apiUrl}/${id}`);
+      await axios.delete(`${apiUrl}/backup/${id}`);
       fetchBackup();
     } catch (error) {
       console.error("Erro ao deletar:", error);
