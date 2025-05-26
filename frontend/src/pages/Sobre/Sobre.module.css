@@ -1,0 +1,95 @@
+.mainSobre {
+  background-color: #1a1a1a;
+  font-family: "Bree Serif", serif;
+}
+
+.titleAndBack {
+  background-color: #0c2701;
+  padding: 2rem 0rem 2rem 0rem;
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+}
+
+.titleAndBack button {
+  width: 100px;
+  height: 40px;
+  background-image: linear-gradient(45deg, #2e9d00, #ffde59);
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-image 0.3s ease, box-shadow 0.3s ease;
+}
+
+.titleAndBack button img {
+  width: 40px;
+}
+
+.titleAndBack button:hover {
+  background-image: linear-gradient(45deg, #ffde59, #2e9d00);
+  box-shadow: 0 0 15px 5px #2f9d0041;
+}
+
+.sectionDesc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 2rem 0rem 2rem 0rem;
+}
+
+.desc {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.desc img {
+  width: 500px;
+}
+
+.descText {
+  width: 500px;
+  margin-left: 1rem;
+  text-align: justify;
+}
+
+.descText h1 {
+  margin-bottom: 1rem;
+}
+
+.descText p {
+  color: #fff;
+}
+
+.boxCarrosel h1 {
+  text-align: center;
+  padding-top: 2rem;
+  margin: 2rem 0rem 2rem 0rem;
+  border-top: 1px solid #2e9d00;
+}
+
+.swiperSlide {
+  text-align: center;
+  font-size: 18px;
+  background: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiperSlide img {
+  display: block;
+  width: 200px;
+  height: 100%;
+  object-fit: cover;
+  padding: 2rem;
+}
+
+.swiper {
+  width: 95%;
+  height: 100%;
+  background: #1a1a1a;
+}

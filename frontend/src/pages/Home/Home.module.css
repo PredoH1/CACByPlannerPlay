@@ -1,0 +1,96 @@
+.main {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-color: #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerLeft {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.containerRight img {
+  width: 35rem;
+}
+
+.paragraph {
+  color: #2c3e50;
+  font-family: "Ruda", serif;
+  letter-spacing: 0.1px;
+  font-weight: bold;
+  font-size: 3rem;
+  transform: translateX(-600px);
+  animation: slideIn 0.7s ease-out forwards;
+}
+
+.paragraph:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.paragraph:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.paragraph:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+  }
+}
+
+.btnMoreInfo button {
+  background-image: linear-gradient(45deg, #2e9d00, #ffde59);
+  border: none;
+  color: #1a1a1a;
+  font-family: "Ruda", serif;
+  padding: 10px 20px;
+  margin-top: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-image 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btnMoreInfo button:hover {
+  background-image: linear-gradient(45deg, #ffde59, #2e9d00);
+  box-shadow: 0 0 15px 5px #2f9d0041;
+}
+
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .containerLeft {
+    margin-top: 8rem;
+    text-align: center;
+  }
+
+  .paragraph {
+    font-size: 2.7rem;
+  }
+
+  .btnMoreInfo {
+    width: 100%;
+  }
+
+  .btnMoreInfo button {
+    width: 100%;
+  }
+
+  .containerRight img {
+    width: 25rem;
+  }
+}
