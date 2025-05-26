@@ -136,7 +136,8 @@ function Sistem() {
 
   async function fetchBackup() {
     try {
-      const response = await axios.get(`${apiUrl}`);
+      const response = await axios.get(`${apiUrl}/backup`);
+      console.log("Dados recebidos da API:", response.data);
       setBackup(response.data);
     } catch (error) {
       console.error("Erro ao buscar backup:", error);
