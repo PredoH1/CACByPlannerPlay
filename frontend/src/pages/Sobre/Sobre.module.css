@@ -96,6 +96,10 @@
 }
 
 @media (max-width: 768px) {
+  .titleAndBack {
+    padding: 5rem;
+    justify-content: safe;
+  }
   .sectionDesc {
     flex-direction: column;
   }
@@ -106,5 +110,21 @@
 
   .desc img {
     width: 400px;
+  }
+
+  .descText {
+    width: 90%;
+  }
+
+  .descText h1 {
+    font-size: 1.3rem;
+  }
+
+  .boxCarrosel h1 {
+    font-size: 1.3rem;
+  }
+
+  .swiperSlide img {
+    width: 130px;
   }
 }
