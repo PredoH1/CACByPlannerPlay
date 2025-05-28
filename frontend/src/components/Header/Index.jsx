@@ -26,7 +26,7 @@ function Header() {
 
       <div className={`${style.linksHeader} ${menuOpen ? style.active : ""}`}>
         <Link to="/" onClick={() => setMenuOpen(false)}>
-          <p>Home</p>
+          <p>Inicio</p>
         </Link>
         <Link to="/sobre">
           <p>Sobre</p>

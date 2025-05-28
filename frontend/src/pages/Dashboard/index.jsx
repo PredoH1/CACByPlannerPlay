@@ -3,6 +3,7 @@ import Header from "../../components/Header/Index";
 import Footer from "../../components/Footer";
 import styles from "../Dashboard/Dashboard.module.css";
 import { Link } from "react-router-dom";
+import backIcon from "../../assets/backIcon.svg";
 import axios from "axios";
 import ReactApexChart from "react-apexcharts";
 
@@ -46,66 +47,239 @@ function Dashboard() {
   return (
     <>
       <Header />
-      <Link to="/">
-        <button>Voltar</button>
-      </Link>
 
       <div className={styles.container}>
-        <h1>Dashboard</h1>
+        <section className={styles.infoText}>
+          <Link to="/">
+            <button>
+              <img src={backIcon} alt="Voltar" />
+            </button>
+          </Link>
+          <h1>Dashboard</h1>
+          {/*      
+           <div>
+           
+                  
+            <p>Total Investido no Período: R$ {totalInvestimento.toFixed(2)}</p>
+            <p>Total Clientes Adquiridos no Período: {totalClientes}</p>
+          </div> */}
+        </section>
 
-        <p>Total Investido no Período: R$ {totalInvestimento.toFixed(2)}</p>
-        <p>Total Clientes Adquiridos no Período: {totalClientes}</p>
+        <div className={styles.infoTop}>
+          {/* Evolução do CAC */}
+          <ReactApexChart
+            options={{
+              chart: {
+                id: "cac-evolucao",
+                background: "#222",
+                toolbar: { show: false },
+                foreColor: "#fff",
+              },
+              xaxis: {
+                categories: categoriasData,
+                labels: { style: { colors: "#ddd", fontSize: "14px" } },
+                axisBorder: { show: true, color: "#444" },
+                axisTicks: { show: true, color: "#444" },
+              },
+              yaxis: {
+                labels: { style: { colors: "#ddd", fontSize: "14px" } },
+                axisBorder: { show: false },
+                axisTicks: { show: false },
+              },
+              title: {
+                text: "Evolução do CAC ao Longo do Tempo",
+                style: {
+                  color: "#00d8ff",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                },
+              },
+              stroke: {
+                curve: "smooth",
+                width: 3,
+              },
+              markers: {
+                size: 5,
+                colors: ["#00d8ff"],
+                strokeColors: "#fff",
+                strokeWidth: 2,
+              },
+              grid: {
+                borderColor: "#333",
+              },
+              tooltip: {
+                theme: "dark",
+              },
+              dataLabels: {
+                enabled: true,
+                style: { colors: ["#00d8ff"], fontWeight: "bold" },
+              },
+            }}
+            series={[{ name: "CAC", data: cacData }]}
+            type="line"
+            height={420}
+            width={700}
+          />
 
-        {/* Evolução do CAC */}
-        <ReactApexChart
-          options={{
-            chart: { id: "cac-evolucao" },
-            xaxis: { categories: categoriasData },
-            title: { text: "Evolução do CAC ao Longo do Tempo" },
-          }}
-          series={[{ name: "CAC", data: cacData }]}
-          type="line"
-          height={350}
-        />
+          {/* Donut de Marketing vs Vendas */}
+          <ReactApexChart
+            options={{
+              chart: {
+                background: "#222",
+                foreColor: "#fff",
+                toolbar: { show: false },
+              },
+              labels: ["Total Marketing", "Total Vendas"],
+              title: {
+                text: "Investimentos Totais",
+                style: {
+                  color: "#00d8ff",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                },
+              },
+              legend: {
+                labels: { colors: "#ddd", useSeriesColors: false },
+                position: "bottom",
+              },
+              dataLabels: {
+                style: { colors: ["#fff"] },
+                dropShadow: { enabled: true },
+              },
+              plotOptions: {
+                pie: {
+                  donut: {
+                    labels: {
+                      show: true,
+                      name: { color: "#00d8ff", fontSize: "18px" },
+                      value: { color: "#fff", fontSize: "16px" },
+                      total: {
+                        show: true,
+                        label: "Total",
+                        color: "#00d8ff",
+                        fontSize: "18px",
+                        formatter: () =>
+                          (totalMarketing + totalVendas).toFixed(2),
+                      },
+                    },
+                  },
+                },
+              },
+              colors: ["#00d8ff", "#ff6f61"],
+              tooltip: { theme: "dark" },
+            }}
+            series={[totalMarketing, totalVendas]}
+            type="donut"
+            height={420}
+            width={500}
+          />
+        </div>
 
-        {/* Donut de Marketing vs Vendas */}
-        <ReactApexChart
-          options={{
-            labels: ["Total Marketing", "Total Vendas"],
-            title: { text: "Investimentos Totais" },
-          }}
-          series={[totalMarketing, totalVendas]}
-          type="donut"
-          height={350}
-        />
+        <div className={styles.infoButtom}>
+          {/* Gráfico de barras: Total Investido no Período */}
+          <ReactApexChart
+            options={{
+              chart: {
+                id: "total-investido",
+                background: "#222",
+                foreColor: "#fff",
+                toolbar: { show: false },
+              },
+              xaxis: {
+                categories: ["Marketing", "Vendas"],
+                labels: { style: { colors: "#ddd", fontSize: "14px" } },
+                axisBorder: { color: "#444" },
+                axisTicks: { color: "#444" },
+              },
+              yaxis: {
+                labels: { style: { colors: "#ddd", fontSize: "14px" } },
+              },
+              title: {
+                text: "Total Investido no Período (R$)",
+                style: {
+                  color: "#00d8ff",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                },
+              },
+              dataLabels: {
+                enabled: true,
+                style: { colors: ["#00d8ff"], fontWeight: "bold" },
+              },
+              plotOptions: {
+                bar: {
+                  borderRadius: 6,
+                  columnWidth: "50%",
+                  colors: {
+                    ranges: [
+                      { from: 0, to: totalInvestimento, color: "#00d8ff" },
+                    ],
+                  },
+                },
+              },
+              fill: {
+                colors: ["#00d8ff"],
+              },
+              tooltip: { theme: "dark" },
+            }}
+            series={[
+              { name: "Investimento", data: [totalMarketing, totalVendas] },
+            ]}
+            type="bar"
+            height={380}
+            width={500}
+          />
 
-        {/* Gráfico de barras: Total Investido no Período */}
-        <ReactApexChart
-          options={{
-            chart: { id: "total-investido" },
-            xaxis: { categories: ["Marketing", "Vendas"] },
-            title: { text: "Total Investido no Período (R$)" },
-            dataLabels: { enabled: true },
-          }}
-          series={[
-            { name: "Investimento", data: [totalMarketing, totalVendas] },
-          ]}
-          type="bar"
-          height={300}
-        />
-
-        {/* Gráfico de barras: Total Clientes Adquiridos */}
-        <ReactApexChart
-          options={{
-            chart: { id: "total-clientes" },
-            xaxis: { categories: ["Clientes Adquiridos"] },
-            title: { text: "Total Clientes Adquiridos no Período" },
-            dataLabels: { enabled: true },
-          }}
-          series={[{ name: "Clientes", data: [totalClientes] }]}
-          type="bar"
-          height={250}
-        />
+          {/* Gráfico de barras: Total Clientes Adquiridos */}
+          <ReactApexChart
+            options={{
+              chart: {
+                id: "total-clientes",
+                background: "#222",
+                foreColor: "#fff",
+                toolbar: { show: false },
+              },
+              xaxis: {
+                categories: ["Clientes Adquiridos"],
+                labels: { style: { colors: "#ddd", fontSize: "14px" } },
+                axisBorder: { color: "#444" },
+                axisTicks: { color: "#444" },
+              },
+              yaxis: {
+                labels: { style: { colors: "#ddd", fontSize: "14px" } },
+              },
+              title: {
+                text: "Total Clientes Adquiridos no Período",
+                style: {
+                  color: "#00d8ff",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                },
+              },
+              dataLabels: {
+                enabled: true,
+                style: { colors: ["#00d8ff"], fontWeight: "bold" },
+              },
+              plotOptions: {
+                bar: {
+                  borderRadius: 6,
+                  columnWidth: "40%",
+                  colors: {
+                    ranges: [{ from: 0, to: totalClientes, color: "#ff6f61" }],
+                  },
+                },
+              },
+              fill: {
+                colors: ["#ff6f61"],
+              },
+              tooltip: { theme: "dark" },
+            }}
+            series={[{ name: "Clientes", data: [totalClientes] }]}
+            type="bar"
+            height={320}
+            width={500}
+          />
+        </div>
       </div>
 
       <Footer />
