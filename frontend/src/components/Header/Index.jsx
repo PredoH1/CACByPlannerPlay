@@ -31,6 +31,10 @@ function Header() {
         <Link to="/sobre">
           <p>Sobre</p>
         </Link>
+
+        <Link to="/dashboard">
+          <p>Visao Ampla</p>
+        </Link>
       </div>
     </header>
   );
