@@ -2,13 +2,13 @@ import styles from "../Sistem/Sistem.module.css";
 import warningIcon from "../../assets/warning.svg";
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
-
 import axios from "axios";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 function Sistem() {
   const apiUrl = import.meta.env.VITE_API_URL;
-  //AREA DO CALCULO
+
+  // Estados do cálculo
   const [marketingData, setMarketingData] = useState({});
   const [salesData, setSalesData] = useState({});
   const [clientsAcquired, setClientsAcquired] = useState(0);
@@ -17,6 +17,12 @@ function Sistem() {
   const [dataRegistro, setDataRegistro] = useState("");
   const [backup, setBackup] = useState([]);
 
+  // Estados para o cálculo por período
+  const [dataInicio, setDataInicio] = useState("");
+  const [dataFim, setDataFim] = useState("");
+  const [cacPeriodo, setCacPeriodo] = useState(null);
+
+  // Funções de manipulação dos inputs
   function handleInputChange(event, type, key) {
     const value = parseFloat(event.target.value) || 0;
     if (type === "marketing") {
@@ -82,35 +88,6 @@ function Sistem() {
     "Outros",
   ];
 
-  // AREA DE DOWNLOAD - DESATIVADA
-
-  function downloadChartAsImage() {
-    const chartElement = document.querySelector("#chart");
-    if (chartElement) {
-      const svg = chartElement.querySelector("svg");
-      const svgData = new XMLSerializer().serializeToString(svg);
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const img = new Image();
-
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        const pngFile = canvas.toDataURL("image/png");
-
-        const downloadLink = document.createElement("a");
-        downloadLink.href = pngFile;
-        downloadLink.download = "chart.png";
-        downloadLink.click();
-      };
-
-      img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
-    }
-  }
-
-  // AREA DO BANCO DE DADOS
-
   async function salvarDados() {
     if (cacResult === null) {
       alert("Calcule o CAC antes de salvar.");
@@ -126,7 +103,7 @@ function Sistem() {
     };
 
     try {
-      await axios.post(`${apiUrl}/backup`, dados); // <- corrigido aqui
+      await axios.post(`${apiUrl}/backup`, dados);
       alert("Dados salvos com sucesso!");
       fetchBackup();
     } catch (error) {
@@ -138,7 +115,6 @@ function Sistem() {
   async function fetchBackup() {
     try {
       const response = await axios.get(`${apiUrl}/backup`);
-      console.log("Dados recebidos da API:", response.data);
       setBackup(response.data);
     } catch (error) {
       console.error("Erro ao buscar backup:", error);
@@ -158,13 +134,48 @@ function Sistem() {
     }
   };
 
+  // Função para calcular o CAC médio por período
+  function calcularCACPeriodo() {
+    if (!dataInicio || !dataFim) {
+      alert("Selecione uma data de início e fim para o cálculo.");
+      return;
+    }
+
+    const registrosFiltrados = backup.filter((item) => {
+      const dataItem = new Date(item.data_registro);
+      return dataItem >= new Date(dataInicio) && dataItem <= new Date(dataFim);
+    });
+
+    if (registrosFiltrados.length === 0) {
+      alert("Nenhum registro encontrado no período.");
+      return;
+    }
+
+    const totalInvestido = registrosFiltrados.reduce(
+      (acc, item) =>
+        acc + parseFloat(item.total_marketing) + parseFloat(item.total_vendas),
+      0
+    );
+    const totalClientes = registrosFiltrados.reduce(
+      (acc, item) => acc + parseInt(item.n_clientes),
+      0
+    );
+
+    if (totalClientes === 0) {
+      alert("Nenhum cliente registrado no período.");
+      return;
+    }
+
+    const cacMedio = totalInvestido / totalClientes;
+    setCacPeriodo(cacMedio);
+  }
+
   return (
     <section className={styles.container}>
       <div className={styles.boxTitleSistem}>
         <h1 className={styles.title}>
           Descubra como é simples e prático otimizar sua gestão de custos!
         </h1>
-
         <h2 className={styles.subtitle}>
           Preencha as informações e veja como o CAC pode transformar suas
           estratégias.
@@ -172,6 +183,7 @@ function Sistem() {
       </div>
 
       <section className={styles.sistem}>
+        {/* Investimentos em Marketing */}
         <div className={styles.card}>
           <div className={styles.card2}>
             <h2>Investimentos em Marketing</h2>
@@ -193,6 +205,7 @@ function Sistem() {
           </div>
         </div>
 
+        {/* Investimentos em Vendas */}
         <div className={styles.card}>
           <div className={styles.card2}>
             <h2>Investimentos em Vendas</h2>
@@ -214,18 +227,10 @@ function Sistem() {
           </div>
         </div>
 
+        {/* Cálculo do CAC */}
         <div className={styles.card}>
           <div className={styles.card2}>
             <h2>Cálculo Final do CAC</h2>
-            <p>
-              Total Investido em Marketing: R${" "}
-              {calculateTotals(marketingData).toFixed(2)}
-            </p>
-            <p>
-              Total Investido em Vendas: R${" "}
-              {calculateTotals(salesData).toFixed(2)}
-            </p>
-
             <label>
               Data do Registro:
               <input
@@ -234,7 +239,6 @@ function Sistem() {
                 onChange={(e) => setDataRegistro(e.target.value)}
               />
             </label>
-
             <label>
               Total de Clientes Adquiridos:
               <input
@@ -245,12 +249,12 @@ function Sistem() {
                 }
               />
             </label>
-
             <button onClick={calculateCAC}>Calcular CAC</button>
           </div>
         </div>
       </section>
 
+      {/* Resultado do CAC */}
       {cacResult !== null && (
         <div className={styles.results}>
           <p>
@@ -268,12 +272,10 @@ function Sistem() {
             </p>
             <p>
               Já um CAC alto pode indicar que é necessário otimizar seus
-              investimentos em marketing e vendas para melhorar a relação
-              custo-benefício.
+              investimentos em marketing e vendas.
             </p>
           </div>
           <button onClick={() => setShowChart(true)}>Gerar Gráfico</button>
-
           <div className={styles.boxSave}>
             <label>
               Total Investido em Marketing:
@@ -283,7 +285,6 @@ function Sistem() {
                 readOnly
               />
             </label>
-
             <label>
               Total Investido em Vendas:
               <input
@@ -292,7 +293,6 @@ function Sistem() {
                 readOnly
               />
             </label>
-
             <label>
               Data do Registro:
               <input
@@ -301,12 +301,10 @@ function Sistem() {
                 onChange={(e) => setDataRegistro(e.target.value)}
               />
             </label>
-
             <label>
               Total de Clientes Adquiridos:
               <input type="number" value={clientsAcquired} readOnly />
             </label>
-
             <label>
               Resultado do CAC:
               <input
@@ -315,7 +313,6 @@ function Sistem() {
                 readOnly
               />
             </label>
-
             <button type="submit" onClick={salvarDados}>
               Salvar
             </button>
@@ -323,48 +320,41 @@ function Sistem() {
         </div>
       )}
 
+      {/* Gráfico */}
       {showChart && (
-        <div>
-          <div className={styles.chartDiv} id="chart">
-            <ReactApexChart
-              options={{
-                chart: {
-                  width: 300,
-                  type: "pie",
-                },
-                labels: chartData.labels,
-                responsive: [
-                  {
-                    breakpoint: 480,
-                    options: {
-                      chart: {
-                        width: 300,
-                      },
-                      legend: {
-                        position: "bottom",
-                      },
-                    },
+        <div className={styles.chartDiv} id="chart">
+          <ReactApexChart
+            options={{
+              chart: { width: 300, type: "pie" },
+              labels: chartData.labels,
+              responsive: [
+                {
+                  breakpoint: 480,
+                  options: {
+                    chart: { width: 300 },
+                    legend: { position: "bottom" },
                   },
-                ],
-              }}
-              series={chartData.series}
-              type="pie"
-              width={600}
-            />
-          </div>
+                },
+              ],
+            }}
+            series={chartData.series}
+            type="pie"
+            width={600}
+          />
         </div>
       )}
 
+      {/* Histórico */}
       <section className={styles.dataHistory}>
-        <h1 className={styles.title}>Seu historico</h1>
+        <h1 className={styles.title}>Seu histórico</h1>
         <table className={styles.tableBackup}>
           <thead>
             <tr>
-              <th className={styles.trBackup}>Data do Registro</th>
-              <th className={styles.trBackup}>Total Marketing</th>
-              <th className={styles.trBackup}>Total Vendas</th>
-              <th className={styles.trBackup}>N° Clientes</th>
-              <th className={styles.trBackup}>Resultado CAC</th>
+              <th>Data do Registro</th>
+              <th>Total Marketing</th>
+              <th>Total Vendas</th>
+              <th>N° Clientes</th>
+              <th>Resultado CAC</th>
             </tr>
           </thead>
           <tbody>
@@ -383,7 +373,7 @@ function Sistem() {
                 <td style={{ textAlign: "center" }}>
                   R$ {parseFloat(item.resultado_cac).toFixed(2)}
                 </td>
-                <td style={{ textAlign: "center" }}>
+                <td>
                   <FaTrash onClick={() => handleDelete(item.id)} />
                 </td>
               </tr>
@@ -391,6 +381,31 @@ function Sistem() {
           </tbody>
         </table>
       </section>
+
+      {/* Cálculo do CAC por Período */}
+      <div className={styles.cardPeriodo}>
+        <h2>Cálculo do CAC por Período</h2>
+        <label>
+          Data Início:
+          <input
+            type="date"
+            value={dataInicio}
+            onChange={(e) => setDataInicio(e.target.value)}
+          />
+        </label>
+        <label>
+          Data Fim:
+          <input
+            type="date"
+            value={dataFim}
+            onChange={(e) => setDataFim(e.target.value)}
+          />
+        </label>
+        <button onClick={calcularCACPeriodo}>Calcular CAC do Período</button>
+        {cacPeriodo !== null && (
+          <p>Resultado do CAC no Período: R$ {cacPeriodo.toFixed(2)}</p>
+        )}
+      </div>
     </section>
   );
 }

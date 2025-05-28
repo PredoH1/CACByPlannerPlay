@@ -217,6 +217,8 @@
 
 /* -------------------------Backup -------------------------------*/
 .dataHistory {
+  width: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -238,6 +240,60 @@
   text-align: center;
   border-bottom: #2e9d00 solid 3px;
   padding: 10px;
+}
+
+.cardPeriodo {
+  width: 100%;
+  height: 100%;
+  background-color: #d6eaf8;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardPeriodo h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  font-weight: 900;
+}
+
+.cardPeriodo label {
+  font-size: 19px;
+  font-weight: 900;
+  color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardPeriodo input {
+  font-size: 13px;
+  font-weight: 900;
+  width: 100%;
+  height: 4vh;
+  color: #2c3e50;
+  background-color: #f4f6f7;
+  border: 0.5px solid #2c3e50;
+}
+
+.cardPeriodo button {
+  background-image: linear-gradient(45deg, #2e9d00, #ffde59);
+  border: none;
+  color: #fff;
+  font-family: "Ruda", serif;
+  padding: 10px 20px;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-image 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cardPeriodo button:hover {
+  background-image: linear-gradient(45deg, #ffde59, #2e9d00);
+  box-shadow: 0 0 15px 5px #2f9d0041;
 }
 
 @media (max-width: 768px) {
